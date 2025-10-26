@@ -1,9 +1,10 @@
 package com.vidalsuporte.cadastroUsuario.domain.usuario;
 
+
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
-import org.springframework.boot.autoconfigure.web.WebProperties;
+
 
 @Entity(name="Usuario")
 @Table(name="tb_usuario")
@@ -13,6 +14,8 @@ import org.springframework.boot.autoconfigure.web.WebProperties;
 @EqualsAndHashCode(of = "id")
 public class Usuario {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +24,13 @@ public class Usuario {
     private String email;
     private String senha;
     private String telefone;
+
+    public Usuario(@Valid DadosCadastroUsuario dadosCadastroUsuario) {
+        this.nome = dadosCadastroUsuario.nome();
+        this.email = dadosCadastroUsuario.email();
+        this.senha = dadosCadastroUsuario.senha();
+        this.telefone = dadosCadastroUsuario.telefone();
+    }
 
 
     public void atualizarDados(@Valid DadosAtualizaUsuario dadosAtualizaUsuario) {
