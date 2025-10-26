@@ -1,6 +1,7 @@
 package com.vidalsuporte.cadastroUsuario.controller;
 
 
+import com.vidalsuporte.cadastroUsuario.domain.usuario.DadosAtualizaUsuario;
 import com.vidalsuporte.cadastroUsuario.domain.usuario.DadosCadastroUsuario;
 import com.vidalsuporte.cadastroUsuario.domain.usuario.DetalhesUsuario;
 import com.vidalsuporte.cadastroUsuario.service.UsuarioService;
@@ -53,5 +54,12 @@ public class UsuarioController {
     public ResponseEntity<DetalhesUsuario> buscaPorNome(@PathVariable String nome){
         return ResponseEntity.ok(usuarioService.buscaPorNome(nome));
     }
+
+    @PutMapping()
+    public ResponseEntity<DetalhesUsuario> atualizar(@RequestBody @Valid DadosAtualizaUsuario dadosAtualizaUsuario){
+        var usuarioAtualizado = usuarioService.atualizar(dadosAtualizaUsuario);
+        return ResponseEntity.ok(usuarioAtualizado);
+    }
+
 
 }
