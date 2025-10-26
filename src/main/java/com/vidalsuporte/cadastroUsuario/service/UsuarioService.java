@@ -3,20 +3,21 @@ package com.vidalsuporte.cadastroUsuario.service;
 
 import com.vidalsuporte.cadastroUsuario.domain.usuario.*;
 import jakarta.validation.Valid;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
+
 public class UsuarioService {
 
-    @Autowired
-    private Usuario usuario;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final Usuario usuario;
+    private final UsuarioRepository usuarioRepository;
 
 
 

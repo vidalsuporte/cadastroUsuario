@@ -6,11 +6,12 @@ import com.vidalsuporte.cadastroUsuario.domain.usuario.DetalhesUsuario;
 import com.vidalsuporte.cadastroUsuario.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Parameter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
@@ -34,7 +35,23 @@ public class UsuarioController {
     }
 
 
+    @GetMapping()
+    @RequestMapping("/todos")
+    public ResponseEntity<Page<DetalhesUsuario>>listarTodos(@PageableDefault(size = 3, sort = {"nome"}) Pageable pageable){
+    var page = usuarioService.listarTodos(pageable);
+    return ResponseEntity.ok(page);
+    }
 
 
+    @GetMapping("/{id}")
+
+    public ResponseEntity<DetalhesUsuario> buscaPorId(@PathVariable Long id){
+    return ResponseEntity.ok(usuarioService.buscaPorId(id));
+    }
+
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<DetalhesUsuario> buscaPorNome(@PathVariable String nome){
+        return ResponseEntity.ok(usuarioService.buscaPorNome(nome));
+    }
 
 }
