@@ -51,9 +51,7 @@ public class UsuarioService {
    }
 
 
-
-
-
-
-
+    public void detelar(Long id) {
+        usuarioRepository.deleteById(id);
+    }
 }
