@@ -1,6 +1,7 @@
 package com.vidalsuporte.cadastroUsuario.domain.usuario;
 
 
+import com.vidalsuporte.cadastroUsuario.domain.perfil.Perfil;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
@@ -14,8 +15,6 @@ import lombok.*;
 @EqualsAndHashCode(of = "id")
 public class Usuario {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,11 +24,15 @@ public class Usuario {
     private String senha;
     private String telefone;
 
+    @Enumerated(EnumType.STRING)
+    private Perfil perfil;
+
     public Usuario(@Valid DadosCadastroUsuario dadosCadastroUsuario) {
         this.nome = dadosCadastroUsuario.nome();
         this.email = dadosCadastroUsuario.email();
         this.senha = dadosCadastroUsuario.senha();
         this.telefone = dadosCadastroUsuario.telefone();
+        this.perfil = Perfil.valueOf(dadosCadastroUsuario.perfil());
     }
 
 
@@ -45,6 +48,9 @@ public class Usuario {
         }
         if(dadosAtualizaUsuario.telefone()!= null){
             this.telefone = dadosAtualizaUsuario.telefone();
+        }
+        if(dadosAtualizaUsuario.perfil() != null){
+            this.perfil = Perfil.valueOf(dadosAtualizaUsuario.perfil());
         }
 
 

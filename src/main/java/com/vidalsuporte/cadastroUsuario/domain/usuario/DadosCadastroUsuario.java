@@ -1,6 +1,7 @@
 package com.vidalsuporte.cadastroUsuario.domain.usuario;
 
 
+import com.vidalsuporte.cadastroUsuario.domain.perfil.Perfil;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -17,8 +18,10 @@ String telefone,
 
 @NotBlank
 @Email
-String email
+String email,
 
+@NotBlank
+String perfil
 
 
 ) {

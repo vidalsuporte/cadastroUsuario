@@ -1,6 +1,7 @@
 package com.vidalsuporte.cadastroUsuario.controller;
 
 
+import com.vidalsuporte.cadastroUsuario.controller.springDoc.IUsuarioController;
 import com.vidalsuporte.cadastroUsuario.domain.usuario.DadosAtualizaUsuario;
 import com.vidalsuporte.cadastroUsuario.domain.usuario.DadosCadastroUsuario;
 import com.vidalsuporte.cadastroUsuario.domain.usuario.DetalhesUsuario;
@@ -18,7 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("usuarios")
-public class UsuarioController {
+public class UsuarioController implements IUsuarioController {
 
     private final UsuarioService usuarioService;
 
@@ -36,8 +37,7 @@ public class UsuarioController {
     }
 
 
-    @GetMapping()
-    @RequestMapping("/todos")
+    @GetMapping("/todos")
     public ResponseEntity<Page<DetalhesUsuario>>listarTodos(@PageableDefault(size = 3, sort = {"nome"}) Pageable pageable){
     var page = usuarioService.listarTodos(pageable);
     return ResponseEntity.ok(page);
