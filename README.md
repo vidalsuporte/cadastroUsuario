@@ -24,13 +24,15 @@ Ele implementa autenticação via **JWT**, persistência em **banco de dados rel
 ## 📂 Estrutura do Projeto
 
 src/
-├─ main/java/com/seuprojeto
+├─ main/java/com/vidalsuporte/cadastroUsuario
 │ ├─ controller
 │ ├─ service
 │ ├─ domain
 │ └─ infra
-|    ├─ exception
-|    ├─ security
-|    └─ springDoc
+|   ├─ configuracao  
+|   ├─ exception
+|   ├─ security
+|   └─ springDoc
 └─ main/resources
+| └─ db.migrations
 └─ application.properties
