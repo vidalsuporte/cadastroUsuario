@@ -40,7 +40,7 @@ public class UsuarioController implements IUsuarioController {
     @GetMapping("/todos")
     public ResponseEntity<Page<DetalhesUsuario>>listarTodos(@PageableDefault(size = 3, sort = {"nome"}) Pageable pageable){
     var page = usuarioService.listarTodos(pageable);
-    return ResponseEntity.ok(page);
+     return ResponseEntity.ok(page);
     }
 
 

@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
+import java.util.Collections;
 
 
 @Entity(name="Usuario")
@@ -75,8 +75,10 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        var perfil = new ArrayList<>();
-        return perfil.stream().map(p-> new SimpleGrantedAuthority("ROLE_" + this.perfil)).toList();
+        var perfil = new SimpleGrantedAuthority("ROLE_" + this.perfil);
+
+
+        return Collections.singleton(perfil);
     }
 
 

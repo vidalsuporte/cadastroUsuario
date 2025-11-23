@@ -1,6 +1,7 @@
 package com.vidalsuporte.cadastroUsuario.controller;
 
 
+import com.vidalsuporte.cadastroUsuario.controller.springDoc.IAutenticacaoController;
 import com.vidalsuporte.cadastroUsuario.domain.usuario.DadosAutenticacao;
 import com.vidalsuporte.cadastroUsuario.domain.usuario.Usuario;
 import com.vidalsuporte.cadastroUsuario.infra.security.TokenJWT;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/login")
 @RequiredArgsConstructor
-public class AutenticacaoController{
+public class AutenticacaoController implements IAutenticacaoController {
 
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;

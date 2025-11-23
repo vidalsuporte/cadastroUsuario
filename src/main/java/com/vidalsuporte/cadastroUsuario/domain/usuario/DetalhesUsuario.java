@@ -10,8 +10,6 @@ public record DetalhesUsuario(
 
         String nome,
 
-        String senha,
-
         String telefone,
 
         String email,
@@ -25,7 +23,7 @@ public record DetalhesUsuario(
 {
     public DetalhesUsuario(Usuario usuario) {
 
-        this(usuario.getId(), usuario.getNome(), usuario.getSenha(), usuario.getTelefone(), usuario.getEmail(), String.valueOf(usuario.getPerfil())
+        this(usuario.getId(), usuario.getNome(), usuario.getTelefone(), usuario.getEmail(), String.valueOf(usuario.getPerfil())
         );
 
 

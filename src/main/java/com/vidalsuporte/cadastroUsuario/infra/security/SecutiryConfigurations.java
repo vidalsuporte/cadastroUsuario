@@ -30,7 +30,7 @@ public class SecutiryConfigurations {
                 .authorizeHttpRequests( req ->{
                     req.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     req.requestMatchers(HttpMethod.POST,"/login").permitAll();
-                    req.requestMatchers(HttpMethod.DELETE, "/usuarios").hasRole("ADMINISTRADOR");
+                    req.requestMatchers(HttpMethod.DELETE, "/usuarios/{id}").hasRole("ADMINISTRADOR");
                     req.requestMatchers(HttpMethod.POST, "/usuarios").hasRole("ADMINISTRADOR");
                     req.anyRequest().authenticated();
                 })
