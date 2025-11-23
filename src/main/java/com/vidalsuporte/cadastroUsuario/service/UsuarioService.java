@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,12 +18,13 @@ public class UsuarioService {
 
     private final Usuario usuario;
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
 
 
     public DetalhesUsuario salvar(@Valid DadosCadastroUsuario dadosCadastroUsuario){
-    var usuario = usuarioRepository.save(new Usuario(dadosCadastroUsuario));
+    var usuario = usuarioRepository.save(new Usuario(dadosCadastroUsuario, passwordEncoder.encode(dadosCadastroUsuario.senha())));
     return new DetalhesUsuario(usuario);
     }
 
@@ -44,7 +47,7 @@ public class UsuarioService {
 
    public DetalhesUsuario atualizar(@Valid DadosAtualizaUsuario dadosAtualizaUsuario){
         var usuarioAtualizado = usuarioRepository.getReferenceById(dadosAtualizaUsuario.id());
-        usuarioAtualizado.atualizarDados(dadosAtualizaUsuario);
+        usuarioAtualizado.atualizarDados(dadosAtualizaUsuario, passwordEncoder.encode(dadosAtualizaUsuario.senha()));
         return new DetalhesUsuario(usuarioRepository.save(usuarioAtualizado));
    }
 

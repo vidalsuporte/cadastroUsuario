@@ -5,6 +5,13 @@ import com.vidalsuporte.cadastroUsuario.domain.perfil.Perfil;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 
 
 @Entity(name="Usuario")
@@ -13,7 +20,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Usuario {
+
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +35,7 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Perfil perfil;
 
+
     public Usuario(@Valid DadosCadastroUsuario dadosCadastroUsuario) {
         this.nome = dadosCadastroUsuario.nome();
         this.email = dadosCadastroUsuario.email();
@@ -35,16 +44,23 @@ public class Usuario {
         this.perfil = Perfil.valueOf(dadosCadastroUsuario.perfil());
     }
 
+    public Usuario(@Valid DadosCadastroUsuario dadosCadastroUsuario, String encode) {
+        this.nome = dadosCadastroUsuario.nome();
+        this.email = dadosCadastroUsuario.email();
+        this.senha = encode;
+        this.telefone = dadosCadastroUsuario.telefone();
+        this.perfil = Perfil.valueOf(dadosCadastroUsuario.perfil());
+    }
 
-    public void atualizarDados(@Valid DadosAtualizaUsuario dadosAtualizaUsuario) {
+    public void atualizarDados(@Valid DadosAtualizaUsuario dadosAtualizaUsuario, String senha) {
         if(dadosAtualizaUsuario.nome()!= null){
             this.nome = dadosAtualizaUsuario.nome();
         }
         if(dadosAtualizaUsuario.email()!= null){
             this.email = dadosAtualizaUsuario.email();
         }
-        if(dadosAtualizaUsuario.senha()!= null){
-            this.senha = dadosAtualizaUsuario.senha();
+        if(senha!= null){
+            this.senha = senha;
         }
         if(dadosAtualizaUsuario.telefone()!= null){
             this.telefone = dadosAtualizaUsuario.telefone();
@@ -56,4 +72,42 @@ public class Usuario {
 
 
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        var perfil = new ArrayList<>();
+        return perfil.stream().map(p-> new SimpleGrantedAuthority("ROLE_" + this.perfil)).toList();
+    }
+
+
+    @Override
+    public String getPassword() {
+        return this.senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 }
