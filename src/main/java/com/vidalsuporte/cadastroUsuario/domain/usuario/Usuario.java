@@ -76,8 +76,6 @@ public class Usuario implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         var perfil = new SimpleGrantedAuthority("ROLE_" + this.perfil);
-
-
         return Collections.singleton(perfil);
     }
 

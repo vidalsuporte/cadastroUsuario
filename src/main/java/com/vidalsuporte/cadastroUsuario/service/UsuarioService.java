@@ -47,7 +47,8 @@ public class UsuarioService {
 
    public DetalhesUsuario atualizar(@Valid DadosAtualizaUsuario dadosAtualizaUsuario){
         var usuarioAtualizado = usuarioRepository.getReferenceById(dadosAtualizaUsuario.id());
-        usuarioAtualizado.atualizarDados(dadosAtualizaUsuario, passwordEncoder.encode(dadosAtualizaUsuario.senha()));
+
+        usuarioAtualizado.atualizarDados(dadosAtualizaUsuario, dadosAtualizaUsuario.senha() !=null ?  passwordEncoder.encode(dadosAtualizaUsuario.senha()): null);
         return new DetalhesUsuario(usuarioRepository.save(usuarioAtualizado));
    }
 
