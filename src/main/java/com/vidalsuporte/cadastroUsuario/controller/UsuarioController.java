@@ -2,17 +2,15 @@ package com.vidalsuporte.cadastroUsuario.controller;
 
 
 import com.vidalsuporte.cadastroUsuario.controller.springDoc.IUsuarioController;
-import com.vidalsuporte.cadastroUsuario.domain.usuario.DadosAtualizaUsuario;
-import com.vidalsuporte.cadastroUsuario.domain.usuario.DadosCadastroUsuario;
-import com.vidalsuporte.cadastroUsuario.domain.usuario.DetalhesUsuario;
+import com.vidalsuporte.cadastroUsuario.domain.usuario.*;
 import com.vidalsuporte.cadastroUsuario.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Parameter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -24,6 +22,7 @@ public class UsuarioController implements IUsuarioController {
     private final UsuarioService usuarioService;
 
 
+    @Transactional
     @PostMapping
     public ResponseEntity<DetalhesUsuario> cadastrar(@RequestBody @Valid DadosCadastroUsuario dadosCadastroUsuario, UriComponentsBuilder uriComponentsBuilder){
 
@@ -43,11 +42,9 @@ public class UsuarioController implements IUsuarioController {
      return ResponseEntity.ok(page);
     }
 
-
     @GetMapping("/{id}")
-
     public ResponseEntity<DetalhesUsuario> buscaPorId(@PathVariable Long id){
-    return ResponseEntity.ok(usuarioService.buscaPorId(id));
+        return ResponseEntity.ok(usuarioService.buscaPorId(id));
     }
 
     @GetMapping("/nome/{nome}")
@@ -55,12 +52,14 @@ public class UsuarioController implements IUsuarioController {
         return ResponseEntity.ok(usuarioService.buscaPorNome(nome));
     }
 
+    @Transactional
     @PutMapping()
     public ResponseEntity<DetalhesUsuario> atualizar(@RequestBody @Valid DadosAtualizaUsuario dadosAtualizaUsuario){
-        var usuarioAtualizado = usuarioService.atualizar(dadosAtualizaUsuario);
+    var usuarioAtualizado = usuarioService.atualizar(dadosAtualizaUsuario);
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity deletar(@PathVariable Long id){
 
@@ -70,5 +69,12 @@ public class UsuarioController implements IUsuarioController {
     }
 
 
+    @Transactional
+    @PostMapping("/alterar_senha")
+    public ResponseEntity<DetalhesUsuario> atualizaSenha(@RequestBody @Valid DetalheNovaSenhaUsuario senhaNova){
+
+        var usuarioAtualizado = usuarioService.atualizarSenha(senhaNova);
+        return ResponseEntity.ok(usuarioAtualizado);
+    }
 
 }

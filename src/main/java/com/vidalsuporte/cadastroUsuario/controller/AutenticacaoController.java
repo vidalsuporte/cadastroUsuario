@@ -24,7 +24,6 @@ public class AutenticacaoController implements IAutenticacaoController {
 
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
-    private final UsuarioService usuarioService;
 
     @PostMapping
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao usuario){

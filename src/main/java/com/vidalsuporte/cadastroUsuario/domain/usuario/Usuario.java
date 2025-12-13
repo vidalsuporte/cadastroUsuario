@@ -8,8 +8,6 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -17,9 +15,11 @@ import java.util.Collections;
 @Entity(name="Usuario")
 @Table(name="tb_usuario")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
+@ToString
 
 public class Usuario implements UserDetails {
 
@@ -52,15 +52,12 @@ public class Usuario implements UserDetails {
         this.perfil = Perfil.valueOf(dadosCadastroUsuario.perfil());
     }
 
-    public void atualizarDados(@Valid DadosAtualizaUsuario dadosAtualizaUsuario, String senha) {
+    public void atualizarDados(@Valid DadosAtualizaUsuario dadosAtualizaUsuario) {
         if(dadosAtualizaUsuario.nome()!= null){
             this.nome = dadosAtualizaUsuario.nome();
         }
         if(dadosAtualizaUsuario.email()!= null){
             this.email = dadosAtualizaUsuario.email();
-        }
-        if(senha!= null){
-            this.senha = senha;
         }
         if(dadosAtualizaUsuario.telefone()!= null){
             this.telefone = dadosAtualizaUsuario.telefone();

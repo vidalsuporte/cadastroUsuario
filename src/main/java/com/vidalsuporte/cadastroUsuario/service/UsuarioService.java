@@ -6,7 +6,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
 
 
-    private final Usuario usuario;
+
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -30,6 +31,12 @@ public class UsuarioService {
 
 
    public DetalhesUsuario buscaPorId(Long id){
+
+       Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       if(usuario.getId() != id && usuario.getPerfil().toString().equals("USUARIO")) {
+           throw new RuntimeException("Acesso negado Somente Administrador pode Buscar dados de outro usuário!");
+       }
+
         return new DetalhesUsuario(usuarioRepository.findById(id).get());
    }
 
@@ -48,7 +55,13 @@ public class UsuarioService {
    public DetalhesUsuario atualizar(@Valid DadosAtualizaUsuario dadosAtualizaUsuario){
         var usuarioAtualizado = usuarioRepository.getReferenceById(dadosAtualizaUsuario.id());
 
-        usuarioAtualizado.atualizarDados(dadosAtualizaUsuario, dadosAtualizaUsuario.senha() !=null ?  passwordEncoder.encode(dadosAtualizaUsuario.senha()): null);
+       Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+       if(usuario.getId() != usuarioAtualizado.getId() && usuario.getPerfil().toString().equals("USUARIO")) {
+           throw new RuntimeException("Acesso negado Somente Administrador pode Alterar dados de outro usuário!");
+       }
+
+        usuarioAtualizado.atualizarDados(dadosAtualizaUsuario);
         return new DetalhesUsuario(usuarioRepository.save(usuarioAtualizado));
    }
 
@@ -56,4 +69,32 @@ public class UsuarioService {
     public void detelar(Long id) {
         usuarioRepository.deleteById(id);
     }
+
+
+    public DetalhesUsuario atualizarSenha(DetalheNovaSenhaUsuario usuarioNovaSenha){
+        var usuarioAtualizado = usuarioRepository.getReferenceById(usuarioNovaSenha.id());
+
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(usuario.getId() != usuarioAtualizado.getId() && usuario.getPerfil().toString().equals("USUARIO")) {
+            throw new RuntimeException("Acesso negado Somente Administrador pode Alterar dados de outro usuário!");
+        }
+        if(passwordEncoder.matches(usuarioNovaSenha.senhaAntiga(), usuario.getPassword())){
+            if (usuarioNovaSenha.senhaNova().equals(usuarioNovaSenha.senhaConfirmacao())) {
+           usuarioAtualizado.setSenha(passwordEncoder.encode(usuarioNovaSenha.senhaNova()));
+            }else {
+                throw new RuntimeException("Confirmação de senha inválida, senha de confirmação e senha nova devem ser iguais!");
+
+            }
+        }else{
+            throw new RuntimeException("Senha Atual inválida!");
+        }
+
+        usuarioRepository.save(usuarioAtualizado);
+      
+        return new DetalhesUsuario(usuario);
+    }
+
+
+
 }

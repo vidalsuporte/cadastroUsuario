@@ -31,23 +31,17 @@ public class SecutiryConfigurations {
                     req.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     req.requestMatchers(HttpMethod.POST,"/login").permitAll();
                     req.requestMatchers(HttpMethod.DELETE, "/usuarios/{id}").hasRole("ADMINISTRADOR");
-                    req.requestMatchers(HttpMethod.POST, "/usuarios").hasRole("ADMINISTRADOR");
+                    req.requestMatchers(HttpMethod.GET, "/usuarios/todos").hasRole("ADMINISTRADOR");
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-
-
-
     }
-
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
         return authenticationConfiguration.getAuthenticationManager();
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder(){

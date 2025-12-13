@@ -18,9 +18,6 @@ public record DadosAtualizaUsuario(
     String telefone,
 
 
-    String senha,
-
-
     @Email
     String email,
 
